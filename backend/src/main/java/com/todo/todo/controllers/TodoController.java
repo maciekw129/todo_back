@@ -1,23 +1,23 @@
 package com.todo.todo.controllers;
 
+import com.todo.todo.exceptions.NotFoundException;
 import com.todo.todo.model.TodoDTO;
 import com.todo.todo.services.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
 public class TodoController {
 
     private static final String TODO_PATH = "/api/v1/todo";
+    private static final String TODO_PATH_ID = TODO_PATH + "/{todoId}";
 
     private final TodoService todoService;
 
@@ -34,5 +34,14 @@ public class TodoController {
         headers.add("Location", "api/v1/todo/" + newTodo.getId());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(TODO_PATH_ID)
+    public ResponseEntity deleteTodoById(@PathVariable UUID todoId) {
+        if(!todoService.deleteTodoById(todoId)) {
+            throw new NotFoundException();
+        }
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

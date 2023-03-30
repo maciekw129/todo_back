@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,4 +32,15 @@ public class TodoServiceJPA implements TodoService {
         todo.setCreatedDate(LocalDateTime.now());
         return todoMapper.todoToTodoDto(todoRepository.save(todoMapper.todoDtoToTodo(todo)));
     }
+
+    @Override
+    public Boolean deleteTodoById(UUID todoId) {
+        if(todoRepository.existsById(todoId)) {
+            todoRepository.deleteById(todoId);
+            return true;
+        }
+
+        return false;
+    }
+
 }
