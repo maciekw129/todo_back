@@ -1,12 +1,10 @@
 package com.todo.todo.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -22,4 +20,12 @@ public class Todo {
     @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID id;
 
+    @Version
+    private Integer version;
+
+    private String todoName;
+
+    private String todoDescription;
+
+    private LocalDateTime createdDate;
 }
