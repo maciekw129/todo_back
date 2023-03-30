@@ -1,4 +1,4 @@
-package com.todo.todo.Mappers;
+package com.todo.todo.mappers;
 
 import com.todo.todo.entities.Todo;
 import com.todo.todo.model.TodoDTO;
