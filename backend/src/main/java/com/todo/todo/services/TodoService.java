@@ -1,10 +1,12 @@
 package com.todo.todo.services;
 
-import com.todo.todo.entities.Todo;
+import com.todo.todo.model.TodoDTO;
 
 import java.util.List;
 
 public interface TodoService {
 
-    List<Todo> getTodoList();
+    List<TodoDTO> getTodoList();
+
+    TodoDTO saveNewTodo(TodoDTO todo);
 }
