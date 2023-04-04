@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class TodoController {
 
@@ -33,7 +34,7 @@ public class TodoController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "api/v1/todo/" + newTodo.getId());
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<TodoDTO>(newTodo, headers, HttpStatus.CREATED);
     }
 
     @DeleteMapping(TODO_PATH_ID)
