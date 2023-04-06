@@ -2,6 +2,7 @@ package com.todo.todo.model;
 
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,5 +18,6 @@ public class TodoDTO {
 
     private String todoDescription;
 
+    @CreationTimestamp
     private LocalDateTime createdDate;
 }

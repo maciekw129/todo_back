@@ -3,6 +3,7 @@ package com.todo.todo.services;
 import com.todo.todo.mappers.TodoMapper;
 import com.todo.todo.model.TodoDTO;
 import com.todo.todo.repositories.TodoRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class TodoServiceJPA implements TodoService {
 
@@ -29,7 +30,6 @@ public class TodoServiceJPA implements TodoService {
 
     @Override
     public TodoDTO saveNewTodo(TodoDTO todo) {
-        todo.setCreatedDate(LocalDateTime.now());
         return todoMapper.todoToTodoDto(todoRepository.save(todoMapper.todoDtoToTodo(todo)));
     }
 
