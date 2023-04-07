@@ -1,5 +1,6 @@
 package com.todo.todo.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.todo.model.TodoDTO;
 import com.todo.todo.services.TodoService;
@@ -82,6 +83,63 @@ class TodoControllerTest {
 
         verify(todoService).saveNewTodo(todoDTOArgumentCaptor.capture());
         assertThat(todoDTOArgumentCaptor.getValue().getTodoName()).isEqualTo(newTodo.getTodoName());
+    }
+
+    @Test
+    void post_todo_should_throw_exception_when_blank_name_and_description() throws Exception {
+        TodoDTO newTodo = TodoDTO.builder()
+                .todoName("")
+                .todoDescription("")
+                .build();
+
+        mockMvc.perform(post(TodoController.TODO_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(newTodo)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.length()", is(4)));
+    }
+
+    @Test
+    void post_todo_should_throw_exception_when_null_name_and_description() throws Exception {
+        TodoDTO newTodo = TodoDTO.builder().build();
+
+        mockMvc.perform(post(TodoController.TODO_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newTodo)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.length()", is(4)));
+    }
+
+    @Test
+    void post_todo_should_throw_exception_when_name_and_description_too_short() throws Exception {
+        TodoDTO newTodo = TodoDTO.builder()
+                .todoName("1")
+                .todoDescription("1")
+                .build();
+
+        mockMvc.perform(post(TodoController.TODO_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newTodo)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.length()", is(2)));
+    }
+
+    @Test
+    void post_todo_should_throw_exception_when_name_and_description_too_long() throws Exception {
+        TodoDTO newTodo = TodoDTO.builder()
+                .todoName("123456789012345678901234567890123456789012345678901234567890")
+                .todoDescription("12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890")
+                .build();
+
+        mockMvc.perform(post(TodoController.TODO_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newTodo)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.length()", is(2)));
     }
 
     @Test
