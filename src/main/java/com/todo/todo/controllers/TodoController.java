@@ -17,8 +17,8 @@ import java.util.UUID;
 @RestController
 public class TodoController {
 
-    private static final String TODO_PATH = "/api/v1/todo";
-    private static final String TODO_PATH_ID = TODO_PATH + "/{todoId}";
+    public static final String TODO_PATH = "/api/v1/todo";
+    public static final String TODO_PATH_ID = TODO_PATH + "/{todoId}";
 
     private final TodoService todoService;
 
