@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class TodoController {
     }
 
     @PostMapping(TODO_PATH)
-    public ResponseEntity postTodo(@RequestBody TodoDTO todo) {
+    public ResponseEntity postTodo(@RequestBody @Validated TodoDTO todo) {
         TodoDTO newTodo = todoService.saveNewTodo(todo);
 
         HttpHeaders headers = new HttpHeaders();
