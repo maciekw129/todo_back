@@ -41,6 +41,9 @@ public class Todo {
     @NotBlank
     private String todoDescription;
 
+    @NotNull
+    private boolean completed = false;
+
     @CreationTimestamp
     private LocalDateTime createdDate;
 }

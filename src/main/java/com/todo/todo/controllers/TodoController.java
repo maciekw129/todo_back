@@ -31,7 +31,7 @@ public class TodoController {
     }
 
     @PostMapping(TODO_PATH)
-    public ResponseEntity postTodo(@RequestBody @Validated TodoDTO todo) {
+    public ResponseEntity<TodoDTO> postTodo(@RequestBody @Validated TodoDTO todo) {
         TodoDTO newTodo = todoService.saveNewTodo(todo);
 
         HttpHeaders headers = new HttpHeaders();
@@ -50,13 +50,13 @@ public class TodoController {
     }
 
     @PatchMapping(TODO_PATH_ID)
-    public ResponseEntity patchTodo(@PathVariable("todoId") UUID todoId, @Validated @RequestBody TodoPatchDTO todo) {
+    public ResponseEntity<TodoDTO> patchTodo(@PathVariable("todoId") UUID todoId, @Validated @RequestBody TodoPatchDTO todo) {
         Optional<TodoDTO> todoDTO = todoService.updateTodoById(todoId, todo);
 
         if(todoDTO.isEmpty()) {
             throw new NotFoundException();
         }
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<TodoDTO>(todoDTO.get(), HttpStatus.OK);
     }
 }

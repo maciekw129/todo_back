@@ -60,6 +60,10 @@ public class TodoServiceJPA implements TodoService {
                 todoFromDb.setTodoDescription(todoPatchDTO.getTodoDescription());
             }
 
+            if(todoPatchDTO.getCompleted() != null) {
+                todoFromDb.setCompleted(todoPatchDTO.getCompleted());
+            }
+
             Todo savedTodo = todoRepository.save(todoFromDb);
             atomicReference.set(Optional.of(todoMapper.todoToTodoDto(savedTodo)));
 

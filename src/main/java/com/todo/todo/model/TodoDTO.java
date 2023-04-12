@@ -27,5 +27,8 @@ public class TodoDTO {
     @NotBlank(message = "Invalid description: description can't be empty.")
     private String todoDescription;
 
+    @NotNull
+    private boolean completed;
+
     private LocalDateTime createdDate;
 }
