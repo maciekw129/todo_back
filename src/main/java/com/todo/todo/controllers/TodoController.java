@@ -26,8 +26,8 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping(TODO_PATH)
-    public List<TodoDTO> getTodoList() {
-        return todoService.getTodoList();
+    public List<TodoDTO> getTodoList(@RequestParam(required = false) Boolean completed) {
+        return todoService.getTodoList(completed);
     }
 
     @PostMapping(TODO_PATH)

@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface TodoService {
 
-    List<TodoDTO> getTodoList();
+    List<TodoDTO> getTodoList(Boolean completed);
 
     TodoDTO saveNewTodo(TodoDTO todo);
 

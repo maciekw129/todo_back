@@ -6,11 +6,9 @@ import com.todo.todo.model.TodoDTO;
 import com.todo.todo.model.TodoPatchDTO;
 import com.todo.todo.repositories.TodoRepository;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,11 +24,24 @@ public class TodoServiceJPA implements TodoService {
     private final TodoMapper todoMapper;
 
     @Override
-    public List<TodoDTO> getTodoList() {
-        return todoRepository.findAll()
+    public List<TodoDTO> getTodoList(Boolean completed) {
+
+        List<Todo> todoList;
+
+        if(completed != null) {
+            todoList = getTodoListByCompleted(completed);
+        } else {
+            todoList = todoRepository.findAll();
+        }
+
+        return todoList
                 .stream()
                 .map(todoMapper::todoToTodoDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<Todo> getTodoListByCompleted(boolean completed) {
+        return todoRepository.findAllByCompleted(completed);
     }
 
     @Override

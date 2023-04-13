@@ -1,6 +1,5 @@
 package com.todo.todo.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.todo.model.TodoDTO;
 import com.todo.todo.services.TodoService;
@@ -56,7 +55,7 @@ class TodoControllerTest {
 
         List<TodoDTO> todoList = Arrays.asList(todo1, todo2);
 
-        given(todoService.getTodoList()).willReturn(todoList);
+        given(todoService.getTodoList(null)).willReturn(todoList);
 
         mockMvc.perform(get(TodoController.TODO_PATH)
                 .accept(MediaType.APPLICATION_JSON))
