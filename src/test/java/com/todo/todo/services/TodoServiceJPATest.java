@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,13 +60,13 @@ public class TodoServiceJPATest {
         given(todoMapper.todoToTodoDto(todo2)).willReturn(todoDTO2);
         given(todoRepository.findAll()).willReturn(todoList);
 
-        List<TodoDTO> listReturned = todoService.getTodoList(null);
+        Page<TodoDTO> listReturned = todoService.getTodoList(null, null, null);
 
-        assertThat(listReturned.get(0).getTodoName()).isEqualTo(todo1.getTodoName());
-        assertThat(listReturned.get(0).getTodoDescription()).isEqualTo(todo1.getTodoDescription());
+        assertThat(listReturned.getContent().get(0).getTodoName()).isEqualTo(todo1.getTodoName());
+        assertThat(listReturned.getContent().get(0).getTodoDescription()).isEqualTo(todo1.getTodoDescription());
 
-        assertThat(listReturned.get(1).getTodoName()).isEqualTo(todo2.getTodoName());
-        assertThat(listReturned.get(1).getTodoDescription()).isEqualTo(todo2.getTodoDescription());
+        assertThat(listReturned.getContent().get(1).getTodoName()).isEqualTo(todo2.getTodoName());
+        assertThat(listReturned.getContent().get(1).getTodoDescription()).isEqualTo(todo2.getTodoDescription());
     }
 
     @Test

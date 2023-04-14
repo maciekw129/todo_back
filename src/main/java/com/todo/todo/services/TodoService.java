@@ -2,14 +2,14 @@ package com.todo.todo.services;
 
 import com.todo.todo.model.TodoDTO;
 import com.todo.todo.model.TodoPatchDTO;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface TodoService {
 
-    List<TodoDTO> getTodoList(Boolean completed);
+    Page<TodoDTO> getTodoList(Boolean completed, Integer pageNumber, Integer pageSize);
 
     TodoDTO saveNewTodo(TodoDTO todo);
 

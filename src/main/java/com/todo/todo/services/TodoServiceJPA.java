@@ -6,14 +6,15 @@ import com.todo.todo.model.TodoDTO;
 import com.todo.todo.model.TodoPatchDTO;
 import com.todo.todo.repositories.TodoRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -23,25 +24,54 @@ public class TodoServiceJPA implements TodoService {
 
     private final TodoMapper todoMapper;
 
-    @Override
-    public List<TodoDTO> getTodoList(Boolean completed) {
+    private static final int DEFAULT_PAGE_SIZE = 25;
+    private static final int DEFAULT_PAGE_NUMBER = 0;
+    private static final int MAX_PAGE_SIZE = 1000;
 
-        List<Todo> todoList;
+    private PageRequest buildPageRequest(Integer pageSize, Integer pageNumber) {
+        int queryPageNumber;
+        int queryPageSize;
 
-        if(completed != null) {
-            todoList = getTodoListByCompleted(completed);
+        if(pageNumber != null && pageNumber > 0) {
+            queryPageNumber = pageNumber - 1;
+
         } else {
-            todoList = todoRepository.findAll();
+            queryPageNumber = DEFAULT_PAGE_NUMBER;
+        }us
+
+        if(pageSize != null && pageSize >= 0) {
+
+            if(pageSize > MAX_PAGE_SIZE) {
+                queryPageSize = MAX_PAGE_SIZE;
+
+            } else {
+                queryPageSize = pageSize;
+            }
+
+        } else {
+            queryPageSize = DEFAULT_PAGE_SIZE;
         }
 
-        return todoList
-                .stream()
-                .map(todoMapper::todoToTodoDto)
-                .collect(Collectors.toList());
+        return PageRequest.of(queryPageNumber, queryPageSize);
     }
 
-    public List<Todo> getTodoListByCompleted(boolean completed) {
-        return todoRepository.findAllByCompleted(completed);
+    private Page<Todo> getTodoListByCompleted(boolean completed, Pageable pageable) {
+        return todoRepository.findAllByCompleted(completed, pageable);
+    }
+
+    @Override
+    public Page<TodoDTO> getTodoList(Boolean completed, Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = buildPageRequest(pageSize, pageNumber);
+
+        Page<Todo> todoPage;
+
+        if(completed != null) {
+            todoPage = getTodoListByCompleted(completed, pageRequest);
+        } else {
+            todoPage = todoRepository.findAll(pageRequest);
+        }
+
+        return todoPage.map(todoMapper::todoToTodoDto);
     }
 
     @Override

@@ -9,6 +9,9 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -55,12 +58,15 @@ class TodoControllerTest {
 
         List<TodoDTO> todoList = Arrays.asList(todo1, todo2);
 
-        given(todoService.getTodoList(null)).willReturn(todoList);
+        PageRequest pageRequest = PageRequest.of(1, 10);
+        Page<TodoDTO> page = new PageImpl<>(todoList, pageRequest, todoList.size());
+
+        given(todoService.getTodoList(null, 1, 25)).willReturn(page);
 
         mockMvc.perform(get(TodoController.TODO_PATH)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$.content.length()", is(2)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
