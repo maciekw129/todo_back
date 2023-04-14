@@ -61,10 +61,13 @@ class TodoControllerTest {
         PageRequest pageRequest = PageRequest.of(1, 10);
         Page<TodoDTO> page = new PageImpl<>(todoList, pageRequest, todoList.size());
 
-        given(todoService.getTodoList(null, 1, 25)).willReturn(page);
+        given(todoService.getTodoList(false, 1, 25)).willReturn(page);
 
         mockMvc.perform(get(TodoController.TODO_PATH)
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                        .queryParam("completed", "false")
+                        .queryParam("pageNumber", "1")
+                        .queryParam("pageSize", "25"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", is(2)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));

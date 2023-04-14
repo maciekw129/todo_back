@@ -11,6 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,9 +59,12 @@ public class TodoServiceJPATest {
 
         List<Todo> todoList = Arrays.asList(todo1, todo2);
 
+        PageRequest pageRequest = PageRequest.of(1, 10);
+        Page<Todo> page = new PageImpl<>(todoList, pageRequest, todoList.size());
+
         given(todoMapper.todoToTodoDto(todo1)).willReturn(todoDTO1);
         given(todoMapper.todoToTodoDto(todo2)).willReturn(todoDTO2);
-        given(todoRepository.findAll()).willReturn(todoList);
+        given(todoRepository.findAll(any(Pageable.class))).willReturn(page);
 
         Page<TodoDTO> listReturned = todoService.getTodoList(null, null, null);
 
