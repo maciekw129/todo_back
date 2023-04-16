@@ -37,7 +37,7 @@ public class TodoServiceJPA implements TodoService {
 
         } else {
             queryPageNumber = DEFAULT_PAGE_NUMBER;
-        }us
+        }
 
         if(pageSize != null && pageSize >= 0) {
 
