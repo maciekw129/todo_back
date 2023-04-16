@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 
 @Getter
@@ -18,12 +20,14 @@ import org.springframework.data.annotation.CreatedDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "todo")
 @Entity
 public class Todo {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
     @Version
