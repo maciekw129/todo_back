@@ -33,6 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
 
         userRepository.save(user);
+
         String token = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(token)
@@ -41,20 +42,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        System.out.println("1");
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        System.out.println("asdasd");
+
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
-        System.out.println("plplpl");
+
         String token = jwtService.generateToken(user);
+
         return AuthenticationResponse.builder()
                 .token(token)
                 .build();
+    }
+
+    @Override
+    public boolean isUserAlreadyExists(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

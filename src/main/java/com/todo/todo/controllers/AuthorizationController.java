@@ -1,5 +1,6 @@
 package com.todo.todo.controllers;
 
+import com.todo.todo.exceptions.UserAlreadyExistsException;
 import com.todo.todo.model.AuthenticationRequest;
 import com.todo.todo.model.AuthenticationResponse;
 import com.todo.todo.model.RegisterRequest;
@@ -22,7 +23,9 @@ public class AuthorizationController {
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest registerRequest
             ) {
-        System.out.println("asd");
+        if(authenticationService.isUserAlreadyExists(registerRequest.getEmail())) {
+            throw new UserAlreadyExistsException("User already exists");
+        }
         return ResponseEntity.ok(authenticationService.register(registerRequest));
     }
 
@@ -30,7 +33,6 @@ public class AuthorizationController {
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody AuthenticationRequest authenticationRequest
             ) {
-        System.out.println("dssdfdfs");
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
     }
 }
