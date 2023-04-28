@@ -5,7 +5,7 @@ import com.todo.todo.model.TodoDTO;
 import com.todo.todo.model.TodoPatchDTO;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(uses = {UserMapper.class})
 public interface TodoMapper {
     TodoDTO todoToTodoDto(Todo todo);
 

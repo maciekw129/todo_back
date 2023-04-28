@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,6 +28,8 @@ public class TodoDTO {
 
     @NotNull
     private boolean completed;
+
+    private UserDTO user;
 
     private LocalDateTime createdDate;
 }

@@ -1,14 +1,17 @@
 package com.todo.todo.controllers;
 
 import com.todo.todo.exceptions.NotFoundException;
+import com.todo.todo.mappers.UserMapper;
 import com.todo.todo.model.TodoDTO;
 import com.todo.todo.model.TodoPatchDTO;
+import com.todo.todo.repositories.UserRepository;
 import com.todo.todo.services.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +27,9 @@ public class TodoController {
     public static final String TODO_PATH_ID = TODO_PATH + "/{todoId}";
 
     private final TodoService todoService;
+    private final UserRepository userRepository;
+
+    private final UserMapper userMapper;
 
     @GetMapping(TODO_PATH)
     public Page<TodoDTO> getTodoList(@RequestParam(required = false) Boolean completed,
@@ -33,7 +39,14 @@ public class TodoController {
     }
 
     @PostMapping(TODO_PATH)
-    public ResponseEntity<TodoDTO> postTodo(@RequestBody @Validated TodoDTO todo) {
+    public ResponseEntity<TodoDTO> postTodo(@RequestBody @Validated TodoDTO todo, Authentication authentication) {
+
+        userRepository.findByEmail(authentication.getName()).ifPresentOrElse(user -> {
+            todo.setUser(userMapper.userToUserDto(user));
+        }, () -> {
+            throw new NotFoundException();
+        });
+
         TodoDTO newTodo = todoService.saveNewTodo(todo);
 
         HttpHeaders headers = new HttpHeaders();

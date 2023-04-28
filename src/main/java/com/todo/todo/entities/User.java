@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+
+    @OneToMany(mappedBy="user")
+    private Set<Todo> todos;
 
     @Enumerated(EnumType.STRING)
     private Role role;

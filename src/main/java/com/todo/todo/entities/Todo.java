@@ -13,7 +13,6 @@ import java.util.UUID;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.springframework.data.annotation.CreatedDate;
 
 @Builder
 @Data
@@ -46,6 +45,9 @@ public class Todo {
 
     @NotNull
     private boolean completed = false;
+
+    @ManyToOne
+    private User user;
 
     @CreationTimestamp
     private LocalDateTime createdDate;
